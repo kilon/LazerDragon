@@ -27,7 +27,7 @@
 #include <QBitmap>
 #include <QPainter>
 
-#include "lazerdragon.h"
+#include "LazerDragon.h"
 #include "AudioEngine.h"
 #include "AutomatableButton.h"
 #include "debug.h"
@@ -50,10 +50,9 @@ Plugin::Descriptor PLUGIN_EXPORT lazerdragon_plugin_descriptor =
 	STRINGIFY( PLUGIN_NAME ),
 	"LazerDragon",
 	QT_TRANSLATE_NOOP( "PluginBrowser",
-				"Three powerful oscillators you can modulate "
-				"in several ways" ),
+				" A synth that is based on tripple oscilator synth" ),
 	"Tobias Doerffel <tobydox/at/users.sf.net>",
-	0x0110,
+	0x0100,
 	Plugin::Instrument,
 	new PluginPixmapLoader( "logo" ),
 	nullptr,
@@ -64,7 +63,7 @@ Plugin::Descriptor PLUGIN_EXPORT lazerdragon_plugin_descriptor =
 
 
 
-OscillatorObject::OscillatorObject( Model * _parent, int _idx ) :
+LDOscillatorObject::LDOscillatorObject( Model * _parent, int _idx ) :
 	Model( _parent ),
 	m_volumeModel( DefaultVolume / NUM_OF_OSCILLATORS, MinVolume,
 			MaxVolume, 1.0f, this, tr( "Osc %1 volume" ).arg( _idx+1 ) ),
@@ -133,7 +132,7 @@ OscillatorObject::OscillatorObject( Model * _parent, int _idx ) :
 
 
 
-OscillatorObject::~OscillatorObject()
+LDOscillatorObject::~LDOscillatorObject()
 {
 	sharedObject::unref( m_sampleBuffer );
 }
@@ -141,7 +140,7 @@ OscillatorObject::~OscillatorObject()
 
 
 
-void OscillatorObject::oscUserDefWaveDblClick()
+void LDOscillatorObject::oscUserDefWaveDblClick()
 {
 	QString af = m_sampleBuffer->openAndSetWaveformFile();
 	if( af != "" )
@@ -154,7 +153,7 @@ void OscillatorObject::oscUserDefWaveDblClick()
 
 
 
-void OscillatorObject::updateVolume()
+void LDOscillatorObject::updateVolume()
 {
 	if( m_panModel.value() >= 0.0f )
 	{
@@ -177,7 +176,7 @@ void OscillatorObject::updateVolume()
 
 
 
-void OscillatorObject::updateDetuningLeft()
+void LDOscillatorObject::updateDetuningLeft()
 {
 	m_detuningLeft = powf( 2.0f, ( (float)m_coarseModel.value() * 100.0f
 				+ (float)m_fineLeftModel.value() ) / 1200.0f )
@@ -187,7 +186,7 @@ void OscillatorObject::updateDetuningLeft()
 
 
 
-void OscillatorObject::updateDetuningRight()
+void LDOscillatorObject::updateDetuningRight()
 {
 	m_detuningRight = powf( 2.0f, ( (float)m_coarseModel.value() * 100.0f
 				+ (float)m_fineRightModel.value() ) / 1200.0f )
@@ -197,7 +196,7 @@ void OscillatorObject::updateDetuningRight()
 
 
 
-void OscillatorObject::updatePhaseOffsetLeft()
+void LDOscillatorObject::updatePhaseOffsetLeft()
 {
 	m_phaseOffsetLeft = ( m_phaseOffsetModel.value() +
 				m_stereoPhaseDetuningModel.value() ) / 360.0f;
@@ -206,12 +205,12 @@ void OscillatorObject::updatePhaseOffsetLeft()
 
 
 
-void OscillatorObject::updatePhaseOffsetRight()
+void LDOscillatorObject::updatePhaseOffsetRight()
 {
 	m_phaseOffsetRight = m_phaseOffsetModel.value() / 360.0f;
 }
 
-void OscillatorObject::updateUseWaveTable()
+void LDOscillatorObject::updateUseWaveTable()
 {
 	m_useWaveTable = m_useWaveTableModel.value();
 }
@@ -224,7 +223,7 @@ LazerDragon::LazerDragon( InstrumentTrack * _instrument_track ) :
 {
 	for( int i = 0; i < NUM_OF_OSCILLATORS; ++i )
 	{
-		m_osc[i] = new OscillatorObject( this, i );
+		m_osc[i] = new LDOscillatorObject( this, i );
 
 	}
 
@@ -423,10 +422,10 @@ void LazerDragon::updateAllDetuning()
 
 
 
-class TripleOscKnob : public Knob
+class LazerDragonKnob : public Knob
 {
 public:
-	TripleOscKnob( QWidget * _parent ) :
+	LazerDragonKnob( QWidget * _parent ) :
 			Knob( knobStyled, _parent )
 	{
 		setFixedSize( 28, 35 );
@@ -565,39 +564,39 @@ LazerDragonView::LazerDragonView( Instrument * _instrument,
 							 i+1 ), "%" );
 
 		// setup panning-knob
-		Knob * pk = new TripleOscKnob( this );
+		Knob * pk = new LazerDragonKnob( this );
 		pk->move( 35, knob_y );
 		pk->setHintText( tr("Osc %1 panning:").arg( i + 1 ), "" );
 
 		// setup coarse-knob
-		Knob * ck = new TripleOscKnob( this );
+		Knob * ck = new LazerDragonKnob( this );
 		ck->move( 82, knob_y );
 		ck->setHintText( tr( "Osc %1 coarse detuning:" ).arg( i + 1 )
 						 , " " + tr( "semitones" ) );
 
 		// setup knob for left fine-detuning
-		Knob * flk = new TripleOscKnob( this );
+		Knob * flk = new LazerDragonKnob( this );
 		flk->move( 111, knob_y );
 		flk->setHintText( tr( "Osc %1 fine detuning left:" ).
 						  arg( i + 1 ),
 							" " + tr( "cents" ) );
 
 		// setup knob for right fine-detuning
-		Knob * frk = new TripleOscKnob( this );
+		Knob * frk = new LazerDragonKnob( this );
 		frk->move( 140, knob_y );
 		frk->setHintText( tr( "Osc %1 fine detuning right:" ).
 						  arg( i + 1 ),
 							" " + tr( "cents" ) );
 
 		// setup phase-offset-knob
-		Knob * pok = new TripleOscKnob( this );
+		Knob * pok = new LazerDragonKnob( this );
 		pok->move( 188, knob_y );
 		pok->setHintText( tr( "Osc %1 phase-offset:" ).
 						  arg( i + 1 ),
 							" " + tr( "degrees" ) );
 
 		// setup stereo-phase-detuning-knob
-		Knob * spdk = new TripleOscKnob( this );
+		Knob * spdk = new LazerDragonKnob( this );
 		spdk->move( 217, knob_y );
 		spdk->setHintText( tr("Osc %1 stereo phase-detuning:" ).
 						arg( i + 1 ),

@@ -8,6 +8,7 @@ SET(MINIMAL_LIST
 	audio_file_processor
 	kicker
 	triple_oscillator
+	lazerdragon
 )
 
 IF(LMMS_MINIMAL)

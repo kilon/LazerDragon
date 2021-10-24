@@ -23,8 +23,8 @@
  *
  */
 
-#ifndef _TRIPLE_OSCILLATOR_H
-#define _TRIPLE_OSCILLATOR_H
+#ifndef _LAZERDRAGON_
+#define _LAZERDRAGON_
 
 #include "Instrument.h"
 #include "InstrumentView.h"
@@ -41,13 +41,13 @@ class SampleBuffer;
 const int NUM_OF_OSCILLATORS = 3;
 
 
-class OscillatorObject : public Model
+class LDOscillatorObject : public Model
 {
 	MM_OPERATORS
 	Q_OBJECT
 public:
-	OscillatorObject( Model * _parent, int _idx );
-	virtual ~OscillatorObject();
+	LDOscillatorObject( Model * _parent, int _idx );
+	virtual ~LDOscillatorObject();
 
 
 private:
@@ -123,7 +123,7 @@ protected slots:
 
 
 private:
-	OscillatorObject * m_osc[NUM_OF_OSCILLATORS];
+	LDOscillatorObject * m_osc[NUM_OF_OSCILLATORS];
 
 	struct oscPtr
 	{
