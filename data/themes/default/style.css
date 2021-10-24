@@ -800,6 +800,16 @@ TripleOscillatorView Knob {
 	qproperty-lineWidth: 2;
 }
 
+LazerDragonView Knob {
+	color: rgb(255, 0, 0);
+	qproperty-outerColor: rgb(0, 4, 255);
+	qproperty-innerRadius: 2;
+	qproperty-outerRadius: 7;
+	qproperty-centerPointX: 13.0;
+	qproperty-centerPointY: 14.0;
+	qproperty-lineWidth: 2;
+}
+
 
 kickerInstrumentView Knob#smallKnob {
 	color: #595959;
