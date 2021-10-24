@@ -1,5 +1,5 @@
 /*
- * lazerhawk.h - declaration of class lazerhawk a powerful
+ * lazerdragon.h - declaration of class lazerdragon a powerful
  *                      instrument-plugin with 3 oscillators
  *
  * Copyright (c) 2004-2014 Tobias Doerffel <tobydox/at/users.sourceforge.net>
@@ -74,8 +74,8 @@ private:
 	float m_phaseOffsetRight;
 	bool m_useWaveTable;
 
-	friend class LazerHawk;
-	friend class LazerHawkView;
+	friend class LazerDragon;
+	friend class LazerDragonView;
 
 
 private slots:
@@ -93,12 +93,12 @@ private slots:
 
 
 
-class LazerHawk : public Instrument
+class LazerDragon : public Instrument
 {
 	Q_OBJECT
 public:
-	LazerHawk( InstrumentTrack * _track );
-	virtual ~LazerHawk();
+	LazerDragon( InstrumentTrack * _track );
+	virtual ~LazerDragon();
 
 	virtual void playNote( NotePlayHandle * _n,
 						sampleFrame * _working_buffer );
@@ -133,18 +133,18 @@ private:
 	} ;
 
 
-	friend class LazerHawkView;
+	friend class LazerDragonView;
 
 } ;
 
 
 
-class LazerHawkView : public InstrumentViewFixedSize
+class LazerDragonView : public InstrumentViewFixedSize
 {
 	Q_OBJECT
 public:
-	LazerHawkView( Instrument * _instrument, QWidget * _parent );
-	virtual ~LazerHawkView();
+	LazerDragonView( Instrument * _instrument, QWidget * _parent );
+	virtual ~LazerDragonView();
 
 
 private:

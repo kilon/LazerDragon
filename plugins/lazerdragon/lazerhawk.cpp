@@ -1,5 +1,5 @@
 /*
- * lazerhawk.cpp - powerful instrument with three oscillators
+ * lazerdragon.cpp - powerful instrument with three oscillators
  *
  * Copyright (c) 2004-2014 Tobias Doerffel <tobydox/at/users.sourceforge.net>
  *
@@ -27,7 +27,7 @@
 #include <QBitmap>
 #include <QPainter>
 
-#include "lazerhawk.h"
+#include "lazerdragon.h"
 #include "AudioEngine.h"
 #include "AutomatableButton.h"
 #include "debug.h"
@@ -45,10 +45,10 @@
 extern "C"
 {
 
-Plugin::Descriptor PLUGIN_EXPORT lazerhawk_plugin_descriptor =
+Plugin::Descriptor PLUGIN_EXPORT lazerdragon_plugin_descriptor =
 {
 	STRINGIFY( PLUGIN_NAME ),
-	"LazerHawk",
+	"LazerDragon",
 	QT_TRANSLATE_NOOP( "PluginBrowser",
 				"Three powerful oscillators you can modulate "
 				"in several ways" ),
@@ -219,8 +219,8 @@ void OscillatorObject::updateUseWaveTable()
 
  
 
-LazerHawk::LazerHawk( InstrumentTrack * _instrument_track ) :
-	Instrument( _instrument_track, &lazerhawk_plugin_descriptor )
+LazerDragon::LazerDragon( InstrumentTrack * _instrument_track ) :
+	Instrument( _instrument_track, &lazerdragon_plugin_descriptor )
 {
 	for( int i = 0; i < NUM_OF_OSCILLATORS; ++i )
 	{
@@ -235,14 +235,14 @@ LazerHawk::LazerHawk( InstrumentTrack * _instrument_track ) :
 
 
 
-LazerHawk::~LazerHawk()
+LazerDragon::~LazerDragon()
 {
 }
 
 
 
 
-void LazerHawk::saveSettings( QDomDocument & _doc, QDomElement & _this )
+void LazerDragon::saveSettings( QDomDocument & _doc, QDomElement & _this )
 {
 	for( int i = 0; i < NUM_OF_OSCILLATORS; ++i )
 	{
@@ -273,7 +273,7 @@ void LazerHawk::saveSettings( QDomDocument & _doc, QDomElement & _this )
 
 
 
-void LazerHawk::loadSettings( const QDomElement & _this )
+void LazerDragon::loadSettings( const QDomElement & _this )
 {
 	for( int i = 0; i < NUM_OF_OSCILLATORS; ++i )
 	{
@@ -301,15 +301,15 @@ void LazerHawk::loadSettings( const QDomElement & _this )
 
 
 
-QString LazerHawk::nodeName() const
+QString LazerDragon::nodeName() const
 {
-	return( lazerhawk_plugin_descriptor.name );
+	return( lazerdragon_plugin_descriptor.name );
 }
 
 
 
 
-void LazerHawk::playNote( NotePlayHandle * _n,
+void LazerDragon::playNote( NotePlayHandle * _n,
 						sampleFrame * _working_buffer )
 {
 	if( _n->totalFramesPlayed() == 0 || _n->m_pluginData == nullptr )
@@ -391,7 +391,7 @@ void LazerHawk::playNote( NotePlayHandle * _n,
 
 
 
-void LazerHawk::deleteNotePluginData( NotePlayHandle * _n )
+void LazerDragon::deleteNotePluginData( NotePlayHandle * _n )
 {
 	delete static_cast<Oscillator *>( static_cast<oscPtr *>(
 						_n->m_pluginData )->oscLeft );
@@ -403,15 +403,15 @@ void LazerHawk::deleteNotePluginData( NotePlayHandle * _n )
 
 
 
-PluginView * LazerHawk::instantiateView( QWidget * _parent )
+PluginView * LazerDragon::instantiateView( QWidget * _parent )
 {
-	return new LazerHawkView( this, _parent );
+	return new LazerDragonView( this, _parent );
 }
 
 
 
 
-void LazerHawk::updateAllDetuning()
+void LazerDragon::updateAllDetuning()
 {
 	for( int i = 0; i < NUM_OF_OSCILLATORS; ++i )
 	{
@@ -436,7 +436,7 @@ public:
 // 82, 109
 
 
-LazerHawkView::LazerHawkView( Instrument * _instrument,
+LazerDragonView::LazerDragonView( Instrument * _instrument,
 							QWidget * _parent ) :
 	InstrumentViewFixedSize( _instrument, _parent )
 {
@@ -708,16 +708,16 @@ LazerHawkView::LazerHawkView( Instrument * _instrument,
 
 
 
-LazerHawkView::~LazerHawkView()
+LazerDragonView::~LazerDragonView()
 {
 }
 
 
 
 
-void LazerHawkView::modelChanged()
+void LazerDragonView::modelChanged()
 {
-	LazerHawk * t = castModel<LazerHawk>();
+	LazerDragon * t = castModel<LazerDragon>();
 	m_mod1BtnGrp->setModel( &t->m_osc[0]->m_modulationAlgoModel );
 	m_mod2BtnGrp->setModel( &t->m_osc[1]->m_modulationAlgoModel );
 
@@ -757,7 +757,7 @@ extern "C"
 // necessary for getting instance out of shared lib
 PLUGIN_EXPORT Plugin * lmms_plugin_main( Model* model, void * )
 {
-	return new LazerHawk( static_cast<InstrumentTrack *>( model ) );
+	return new LazerDragon( static_cast<InstrumentTrack *>( model ) );
 }
 
 }
